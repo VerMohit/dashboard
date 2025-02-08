@@ -4,8 +4,7 @@ import { Welcome } from '../components/Welcome/Welcome';
 export default function HomePage() {
   return (
     <>
-      <Welcome />
-      <ColorSchemeToggle />
+      <h1>This is the entry point of the dashboard</h1>
     </>
   );
 }
