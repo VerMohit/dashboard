@@ -27,7 +27,7 @@ import { Customer, Invoices } from './drizzle/schema'; // Import the table defin
 
 async function seedDB() {
   try {
-    // Create fake customer with phone numbers
+    // Create fake customer with phone numbers and active status
     const insertedCustomer = await db
       .insert(Customer)
       .values([
@@ -43,6 +43,7 @@ async function seedDB() {
           state: 'NY',
           country: 'USA',
           phoneNo: '+1 123 456 7890', // Added phone number
+          active: true, // Explicitly setting active status
         },
         {
           firstName: 'Jane',
@@ -56,6 +57,7 @@ async function seedDB() {
           state: 'CA',
           country: 'USA',
           phoneNo: '+1 987 654 3210', // Added phone number
+          active: true, // Explicitly setting active status
         },
         {
           firstName: 'Alice',
@@ -69,6 +71,7 @@ async function seedDB() {
           state: 'CA',
           country: 'USA',
           phoneNo: '+1 555 123 4567', // Added phone number
+          active: true, // Explicitly setting active status
         },
       ])
       .returning({ customerId: Customer.customerId });
@@ -78,39 +81,42 @@ async function seedDB() {
     // Create fake Invoices associated with the fake customers
     const invoice = await db.insert(Invoices).values([
       {
-        amount: '150.00',
-        amountPaid: '0.00',
-        status: InvoiceStatus.Unpaid,
+        invoiceNumber: 'INV-001', // Added invoice number
+        amount: 150.00,
+        amountPaid: 0.00,
+        invoiceStatus: InvoiceStatus.Unpaid,
         customerId: customerIds[0], // customerId for John Doe
-        invoiceDate: new Date().toISOString(), // YYYY-MM-DDTHH:mm:ss.sssZ
+        invoiceDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD
       },
       {
-        amount: '200.00',
-        amountPaid: '200.00',
-        status: InvoiceStatus.Paid,
+        invoiceNumber: 'INV-002', // Added invoice number
+        amount: 200.00,
+        amountPaid: 200.00,
+        invoiceStatus: InvoiceStatus.Paid,
         customerId: customerIds[1], // customerId for Jane Smith
-        invoiceDate: new Date().toISOString(),
+        invoiceDate: new Date().toISOString().split('T')[0],
       },
       {
-        amount: '250.00',
-        amountPaid: '0.00',
-        status: InvoiceStatus.Unpaid,
+        invoiceNumber: 'INV-003', // Added invoice number
+        amount: 250.00,
+        amountPaid: 0.00,
+        invoiceStatus: InvoiceStatus.Unpaid,
         customerId: customerIds[1], // customerId for Jane Smith
-        invoiceDate: new Date().toISOString(),
+        invoiceDate: new Date().toISOString().split('T')[0],
       },
       {
-        amount: '300.00',
-        amountPaid: '0.00',
-        status: InvoiceStatus.Unpaid,
+        invoiceNumber: 'INV-004', // Added invoice number
+        amount: 300.00,
+        amountPaid: 0.00,
+        invoiceStatus: InvoiceStatus.Unpaid,
         customerId: customerIds[2], // customerId for Alice Johnson
-        invoiceDate: new Date().toISOString(),
+        invoiceDate: new Date().toISOString().split('T')[0],
       },
     ]);
-
-    console.log('Database seeded with data!');
   } catch (error) {
-    console.error('Error seeding data: ', error);
+    console.error("Error seeding the database:", error);
   }
 }
+
 
 seedDB().catch(err => console.error("Error seeding:", err));
