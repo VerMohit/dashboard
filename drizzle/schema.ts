@@ -5,6 +5,14 @@
     `yarn generate --name=test_migration` OR
     `yarn drizzle-kit generate --config ./drizzle/drizzle.config.ts --name <name_of_schema_updates>`
 
+    To drop migration:
+        `yarn drizzle-kit drop` OR 
+        `yarn drizzle-kit drop --config ./drizzle/drizzle.config.ts`
+
+        NOTE: dropping a migration only drops that file and DOSEN'T revert the db change.
+              So make sure that the migration is what we want before pushing, else it may be difficult
+              to revert the db back to the last state
+
     To push changes to actual db: 
         `yarn drizzle-kit push` OR 
         `yarn drizzle-kit push --config ./drizzle/drizzle.config.ts`
@@ -22,7 +30,8 @@ import {
     decimal,
     text,
     date,
-    varchar 
+    varchar,
+    boolean
 } from "drizzle-orm/pg-core";
 
 import { InvoiceStatus } from "./lib/invoiceEnum";
@@ -57,6 +66,8 @@ export const Customer = pgTable("customers", {
     .notNull(),
   country: text("country")
     .notNull(),
+  active: boolean("active")  // Soft delete purposes
+    .default(true),
 });
 
 // Invoices table
@@ -65,6 +76,9 @@ export const Invoices = pgTable("invoices", {
     .primaryKey(),                                    // Autoincrementing ID
   customerId: integer("customer_id")
     .references(() => Customer.customerId),                 // Foreign key to Customer
+  invoiceNumber: text("invoice_Number")
+    .unique()
+    .notNull(),
   amount: decimal("amount", { precision: 10, scale: 2 })
     .notNull(),                                          // 10 digits for integer part and 2 digits for fractional part
   amountPaid: decimal("amount_paid", { precision: 10, scale: 2 })
@@ -73,7 +87,7 @@ export const Invoices = pgTable("invoices", {
   invoiceDate: date("invoice_date")
     .defaultNow()
     .notNull(),                                                                     // Default to current date and time
-  status: integer("status")
+  invoiceStatus: text("invoice_status")
     .default(InvoiceStatus.Unpaid)
-    .notNull(),                                                                    // Default to "Unpaid" status
+    // .notNull(),                                                                    // Default to "Unpaid" status
 });

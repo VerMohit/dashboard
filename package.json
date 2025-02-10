@@ -21,7 +21,8 @@
     "storybook:build": "storybook build",
     "seed": "ts-node seed.ts",
     "generate": "drizzle-kit generate --config=drizzle/drizzle.config.ts",
-    "migrate": "drizzle-kit migrate --config=drizzle/drizzle.config.ts"
+    "migrate": "drizzle-kit migrate --config=drizzle/drizzle.config.ts",
+    "reset-db": "ts-node resetDatabase.ts"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

@@ -7,3 +7,5 @@ var InvoiceStatus;
     InvoiceStatus[InvoiceStatus["Paid"] = 1] = "Paid";
     InvoiceStatus[InvoiceStatus["Unpaid"] = 2] = "Unpaid";
 })(InvoiceStatus || (exports.InvoiceStatus = InvoiceStatus = {}));
+
+
