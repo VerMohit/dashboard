@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1738560648562,
-      "tag": "0000_created_Cusomter_Invoices_Tables",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1738562285411,
-      "tag": "0001_updated_Customer_and_Invoices_table_attributes",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1738616587367,
-      "tag": "0002_test_migration",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1739163215704,
-      "tag": "0003_added_active_to_Customer_invoiceNumber_and_invoiceStatus_Invoices",
+      "when": 1739171583667,
+      "tag": "0000_created_Customer_Invoices_tables",
       "breakpoints": true
     }
   ]

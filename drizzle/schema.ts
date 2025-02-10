@@ -21,7 +21,12 @@
 
     Any changes we make to the schema will be done in this file. When we micgrate, Drizzle will compare agsint
     current db schema and apply changes made. We then need to push the migrations to see the updates on DBeaver
-*/
+
+    To compile this file into a .js file, run:
+      `yarn tsc ./drizzle/schema.ts`
+
+
+    */
 
 import { 
     pgTable, 

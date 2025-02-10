@@ -26,97 +26,96 @@ import { InvoiceStatus } from './drizzle/lib/invoiceEnum'; // Import the Invoice
 import { Customer, Invoices } from './drizzle/schema'; // Import the table definitions
 
 async function seedDB() {
+  console.log("🗑️ Seeding database...");
   try {
-    // Create fake customer with phone numbers and active status
-    const insertedCustomer = await db
-      .insert(Customer)
-      .values([
-        {
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@example.com',
-          companyName: 'Doe Enterprises',
-          unitNo: 101,
-          street: '123 Main St',
-          city: 'New York',
-          postalCode: '10001',
-          state: 'NY',
-          country: 'USA',
-          phoneNo: '+1 123 456 7890', // Added phone number
-          active: true, // Explicitly setting active status
-        },
-        {
-          firstName: 'Jane',
-          lastName: 'Smith',
-          email: 'jane.smith@example.com',
-          companyName: 'Smith Solutions',
-          unitNo: 202,
-          street: '456 Elm St',
-          city: 'San Francisco',
-          postalCode: '94016',
-          state: 'CA',
-          country: 'USA',
-          phoneNo: '+1 987 654 3210', // Added phone number
-          active: true, // Explicitly setting active status
-        },
-        {
-          firstName: 'Alice',
-          lastName: 'Johnson',
-          email: 'alice.johnson@example.com',
-          companyName: 'Alice Corp',
-          unitNo: 303,
-          street: '789 Oak St',
-          city: 'Los Angeles',
-          postalCode: '90001',
-          state: 'CA',
-          country: 'USA',
-          phoneNo: '+1 555 123 4567', // Added phone number
-          active: true, // Explicitly setting active status
-        },
-      ])
-      .returning({ customerId: Customer.customerId });
+  // Create fake customers with all required fields
+  const insertedCustomer = await db.insert(Customer).values([
+    {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+      companyName: 'Doe Enterprises',
+      unitNo: 101,
+      street: '123 Main St',
+      city: 'New York',
+      postalCode: '10001',
+      state: 'NY',
+      country: 'USA',
+      phoneNo: '+1 123 456 7890',
+      active: true, // Explicitly setting active status
+    },
+    {
+      firstName: 'Jane',
+      lastName: 'Smith',
+      email: 'jane.smith@example.com',
+      companyName: 'Smith Solutions',
+      unitNo: 202,
+      street: '456 Elm St',
+      city: 'San Francisco',
+      postalCode: '94016',
+      state: 'CA',
+      country: 'USA',
+      phoneNo: '+1 987 654 3210',
+      active: true,
+    },
+    {
+      firstName: 'Alice',
+      lastName: 'Johnson',
+      email: 'alice.johnson@example.com',
+      companyName: 'Alice Corp',
+      unitNo: 303,
+      street: '789 Oak St',
+      city: 'Los Angeles',
+      postalCode: '90001',
+      state: 'CA',
+      country: 'USA',
+      phoneNo: '+1 555 123 4567',
+      active: true,
+    },
+  ]).returning({ customerId: Customer.customerId });
 
-    const customerIds = insertedCustomer.map((customer) => customer.customerId);
+  const customerIds = insertedCustomer.map((customer) => customer.customerId);
 
-    // Create fake Invoices associated with the fake customers
-    const invoice = await db.insert(Invoices).values([
-      {
-        invoiceNumber: 'INV-001', // Added invoice number
-        amount: 150.00,
-        amountPaid: 0.00,
-        invoiceStatus: InvoiceStatus.Unpaid,
-        customerId: customerIds[0], // customerId for John Doe
-        invoiceDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD
-      },
-      {
-        invoiceNumber: 'INV-002', // Added invoice number
-        amount: 200.00,
-        amountPaid: 200.00,
-        invoiceStatus: InvoiceStatus.Paid,
-        customerId: customerIds[1], // customerId for Jane Smith
-        invoiceDate: new Date().toISOString().split('T')[0],
-      },
-      {
-        invoiceNumber: 'INV-003', // Added invoice number
-        amount: 250.00,
-        amountPaid: 0.00,
-        invoiceStatus: InvoiceStatus.Unpaid,
-        customerId: customerIds[1], // customerId for Jane Smith
-        invoiceDate: new Date().toISOString().split('T')[0],
-      },
-      {
-        invoiceNumber: 'INV-004', // Added invoice number
-        amount: 300.00,
-        amountPaid: 0.00,
-        invoiceStatus: InvoiceStatus.Unpaid,
-        customerId: customerIds[2], // customerId for Alice Johnson
-        invoiceDate: new Date().toISOString().split('T')[0],
-      },
-    ]);
+  // Create fake invoices with all required fields
+  const invoices = await db.insert(Invoices).values([
+    {
+      invoiceNumber: 'INV-001',
+      amount: 150.00,
+      amountPaid: 0.00,
+      invoiceStatus: InvoiceStatus.Unpaid,
+      customerId: customerIds[0],
+      invoiceDate: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+    },
+    {
+      invoiceNumber: 'INV-002',
+      amount: 200.00,
+      amountPaid: 200.00,
+      invoiceStatus: InvoiceStatus.Paid,
+      customerId: customerIds[1],
+      invoiceDate: new Date().toISOString().split('T')[0],
+    },
+    {
+      invoiceNumber: 'INV-003',
+      amount: 250.00,
+      amountPaid: 0.00,
+      invoiceStatus: InvoiceStatus.Unpaid,
+      customerId: customerIds[1],
+      invoiceDate: new Date().toISOString().split('T')[0],
+    },
+    {
+      invoiceNumber: 'INV-004',
+      amount: 300.00,
+      amountPaid: 0.00,
+      invoiceStatus: InvoiceStatus.Unpaid,
+      customerId: customerIds[2],
+      invoiceDate: new Date().toISOString().split('T')[0],
+    },
+  ]);
+  console.log("✅ Seeded database successfully!");
   } catch (error) {
-    console.error("Error seeding the database:", error);
+    console.error("❌ Error seeding the database:", error);
   }
 }
 
 
-seedDB().catch(err => console.error("Error seeding:", err));
+seedDB().catch(err => console.error("❌ Error seeding:", err));

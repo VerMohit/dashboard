@@ -1,5 +1,5 @@
 {
-  "id": "76b9ab2e-4524-4395-941c-b8e40c773848",
+  "id": "c9ce4678-d910-43e7-bdfb-2e8a52d0f3f1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -18,67 +18,74 @@
           "name": "first_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "last_name": {
           "name": "last_name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "phone_number": {
           "name": "phone_number",
           "type": "varchar(15)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "email": {
           "name": "email",
           "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "company_name": {
           "name": "company_name",
-          "type": "varchar(255)",
+          "type": "varchar(355)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "unit_no": {
           "name": "unit_no",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "street": {
           "name": "street",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "city": {
           "name": "city",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "postal_code": {
           "name": "postal_code",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "state": {
           "name": "state",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "country": {
           "name": "country",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
         }
       },
       "indexes": {},
@@ -127,32 +134,38 @@
           "primaryKey": false,
           "notNull": false
         },
+        "invoice_Number": {
+          "name": "invoice_Number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "amount": {
           "name": "amount",
           "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "amount_paid": {
           "name": "amount_paid",
           "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "'0.00'"
         },
         "invoice_date": {
           "name": "invoice_date",
           "type": "date",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
-        "status": {
-          "name": "status",
-          "type": "integer",
+        "invoice_status": {
+          "name": "invoice_status",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "default": 2
+          "default": "'Unpaid'"
         }
       },
       "indexes": {},
@@ -172,7 +185,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "invoices_invoice_Number_unique": {
+          "name": "invoices_invoice_Number_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "invoice_Number"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
