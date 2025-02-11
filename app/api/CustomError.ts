@@ -9,6 +9,16 @@ class AppError extends Error {
         this.name = this.constructor.name;
         this.statusCode = statusCode;
         this.code = code;
+
+        Error.captureStackTrace(this, this.constructor);
+    }
+
+    toJSON() {
+        return {
+            status: 'error',
+            message: this.message,
+            code: this.code
+        };
     }
 }
 
