@@ -36,7 +36,7 @@ import {
     text,
     date,
     varchar,
-    boolean
+    boolean,
 } from "drizzle-orm/pg-core";
 
 import { InvoiceStatus } from "./lib/invoiceEnum";
@@ -44,8 +44,9 @@ import { InvoiceStatus } from "./lib/invoiceEnum";
 
 // Customer table
 export const Customer = pgTable("customers", {
+  // Autoincrementing ID
   customerId: serial("customer_id")
-    .primaryKey(),                     // Autoincrementing ID
+    .primaryKey(),                     
   firstName: text("first_name")
     .notNull(),
   lastName: text("last_name")
@@ -71,28 +72,34 @@ export const Customer = pgTable("customers", {
     .notNull(),
   country: text("country")
     .notNull(),
-  active: boolean("active")  // Soft delete purposes
+  // Soft delete purposes
+  active: boolean("active")  
     .default(true),
 });
 
 // Invoices table
 export const Invoices = pgTable("invoices", {
+  // Autoincrementing ID
   invoiceId: serial("invoice_id")
-    .primaryKey(),                                    // Autoincrementing ID
+    .primaryKey(),         
+  // Foreign key to Customer                           
   customerId: integer("customer_id")
-    .references(() => Customer.customerId),                 // Foreign key to Customer
+    .references(() => Customer.customerId)
+    .notNull(),                 
   invoiceNumber: text("invoice_Number")
     .unique()
     .notNull(),
+  // 10 digits for integer part and 2 digits for fractional part
   amount: decimal("amount", { precision: 10, scale: 2 })
-    .notNull(),                                          // 10 digits for integer part and 2 digits for fractional part
+    .notNull(),                                          
   amountPaid: decimal("amount_paid", { precision: 10, scale: 2 })
     .default("0.00")
-    .notNull(), // Default value of $0.00
+    .notNull(), 
+  // Default to current date and time
   invoiceDate: date("invoice_date")
     .defaultNow()
-    .notNull(),                                                                     // Default to current date and time
+    .notNull(),                                                                     
   invoiceStatus: text("invoice_status")
     .default(InvoiceStatus.Unpaid)
-    // .notNull(),                                                                    // Default to "Unpaid" status
+    .notNull(),                                                                    
 });

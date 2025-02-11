@@ -41,8 +41,8 @@
 // For form request data coming from fronend when submitting invoice related data
 type InvoiceRequestData = {
     invoiceNumber: string,
-    amount: number,
-    amountPaid: number,
+    amount: string,
+    amountPaid: string,
     invoiceDate: string,
     invoiceStatus: "Paid" | "Unpaid",
 }
@@ -55,10 +55,10 @@ type InsertedInvoice = {
     invoiceId: number,
     customerId: number,
     invoiceNumber: string,
-    amount: number,
-    amountPaid: number,
+    amount: string,
+    amountPaid: string,
     invoiceDate: string,
-    invoiceStatus: "Paid" | "Unpaid", 
+    invoiceStatus: string, 
 }
 
 

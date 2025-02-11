@@ -43,13 +43,15 @@ export async function POST(req : Request) {
 
         const {customer, invoiceBatch} = body as RequestBody;
 
-        console.log(customer);      // debugging purposes
-        console.log(invoiceBatch);  // debugging purposes
+        // console.log(customer);      // debugging purposes
+        // console.log(invoiceBatch);  // debugging purposes
 
+        // App level check
         if(!Array.isArray(invoiceBatch)) {
             throw new ValidationError(`Invalid invoice formatting: ${invoiceBatch}`);
         }
 
+        // App level check
         if(invoiceBatch.length > 0) {
             const invoiceNumbers = invoiceBatch.map(
                 invoice => invoice.invoiceNumber
@@ -72,17 +74,22 @@ export async function POST(req : Request) {
                                     .onConflictDoNothing()         // DB level check to see if an entry with a unique attribute already exists; if so db throws error.
                                     .returning() as { customerId: number }[];
 
+        // console.log(`typeof newCustomer: ${typeof newCustomer}`)  // debugging purposes
+
         if (!newCustomer.length) {
             throw new ConflictError(`Customer with this email already exists: ${customer.email}`);
         }
 
-        const newCustomerId = newCustomer[0]?.customerId;
+        const newCustomerId = newCustomer[0].customerId;
+        // const newCustomerId = newCustomer[0]?.customerId;
+        // console.log(`new customer id: ${newCustomerId}`);         // debugging purposes
+        // console.log(`typeof newCustomer: ${typeof newCustomerId}`);  // debugging purposes
 
-        if(newCustomerId === undefined || newCustomerId === null) {
-            throw new DatabaseError(`Failed to create customer. Email: ${newCustomer[0].customerId}`);
-        };
+        // if(newCustomerId === null) {
+        //     throw new DatabaseError(`Failed to create customer. Email: ${newCustomer[0].customerId}`);
+        // };
 
-        console.log(newCustomer);  // debugging purposes
+        // console.log(newCustomer);  // debugging purposes
         
         let insertedInvoices : InsertedInvoice[] = [];
 
@@ -92,14 +99,20 @@ export async function POST(req : Request) {
             const invoiceData = invoiceBatch.map((invoice : InvoiceRequestData) => ({
                 customerId: newCustomerId,
                 invoiceNumber: invoice.invoiceNumber,
-                amount: invoice.amount.toFixed(2),
-                amountPaid: invoice.amountPaid.toFixed(2),
+                amount: Number(invoice.amount).toFixed(2),
+                amountPaid: Number(invoice.amountPaid).toFixed(2),
                 invoiceDate: invoice.invoiceDate,
-                invoiceStatus: invoice.invoiceStatus,
-
-                
+                invoiceStatus: invoice.invoiceStatus as 'Paid' | 'Unpaid',
             }));
 
+            // App level verification
+            const invalidInvoices = invoiceData.filter(invoice => invoice.invoiceStatus !== 'Paid' && invoice.invoiceStatus !== 'Unpaid')
+
+            if(invalidInvoices.length > 0) {
+                const invalidInvoiceNumbers = invalidInvoices.map(invoice => invoice.invoiceStatus);
+                throw new ValidationError(`Ensure invoice status is either 'Paid' or 'Unpaid' for invoices: ${invalidInvoiceNumbers.join(', ')}`);
+            }
+            
             insertedInvoices = await db.insert(Invoices)
                                     .values(invoiceData)
                                     .returning();
