@@ -1,7 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { Customer } from './schema';
 
 config();
 
