@@ -1,0 +1,25 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on push to the 'main' branch
+
+jobs:
+  build:  # Job name
+    runs-on: ubuntu-latest  # The job will run on the latest version of Ubuntu
+
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}  # Set DATABASE_URL as an environment variable
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # This step checks out the repository's code
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Set up Node.js version 16
+
+      - name: Install dependencies using Yarn
+        run: yarn install  # Install dependencies using Yarn
